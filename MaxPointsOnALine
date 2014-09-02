@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int maxPoints(vector<Point> &points) {
+        if(points.size() <= 2)
+            return (int)points.size();
+        
+        int maxNum = 0;
+        for (int i = 0; i < points.size(); i++) {
+            map<double, int>mp;
+            int samePoints = 0;
+            int parallelPoints = 0;
+            int x = points[i].x;
+            int y = points[i].y;
+            
+            for (int j = 0; j < points.size(); j++){
+                int x1 = points[j].x;
+                int y1 = points[j].y;
+                if (x == x1 && y == y1) {
+                    samePoints++;
+                }
+                else if (y == y1){  
+                    parallelPoints++;
+                }
+                else{
+                    double slope = static_cast<double>(y - y1) / (x - x1);
+                    mp[slope]++;
+                }
+            }
+            for (map<double, int>::iterator it = mp.begin(); it != mp.end(); it++) {
+                if (maxNum < it->second + samePoints) {
+                    maxNum  = it->second + samePoints;
+                }
+            }
+            if (maxNum < parallelPoints + samePoints) {
+                maxNum = parallelPoints + samePoints;
+            }
+        }
+        return maxNum;
+    }
+};
