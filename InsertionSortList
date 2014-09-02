@@ -1,0 +1,42 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *insertionSortList(ListNode *head) {
+        if(!head)
+            return head;
+
+        ListNode *cur = head->next;
+        head->next = NULL;
+        while(cur){
+            ListNode *tmp = head;
+            ListNode *pre = NULL;
+            ListNode *tmp2 = cur;
+
+            while(tmp && cur->val >= tmp->val){
+                pre = tmp;
+                tmp = tmp->next;
+            }
+            cur = cur->next;
+            if(!pre){//插入到有序链表之前
+                tmp2->next = head;
+                head = tmp2;
+            }
+            else if(tmp){//插入到有序链表之中
+                tmp2->next = tmp;
+                pre->next = tmp2;
+            }
+            else{//插入到有序链表末尾
+                pre->next = tmp2;
+                tmp2->next = NULL;
+            }
+        }
+        return head;
+    }
+};
