@@ -1,0 +1,57 @@
+class LRUCache{
+
+    struct node{
+        int key;
+        int val;
+        node (int k, int v) : key(k), val(v){};
+    };
+    map<int, node*>mp;  //用于存储索引值key所对应的value
+    list<int>l;         //用于按访问时间排列节点顺序
+    int mapCapacity;
+
+public:
+    LRUCache(int capacity) {
+        if(capacity < 0)
+            return;
+        mp.clear();
+        l.clear();
+        mapCapacity = capacity;
+    }
+
+    int get(int key) {
+        map<int, node*>::iterator itMap = mp.find(key);
+        if(itMap != mp.end()){
+            touch(key);
+            return itMap->second->val;
+        }
+        else
+            return -1;
+    }
+
+    void set(int key, int value) {
+        if(mapCapacity < 1)
+            return;
+        map<int, node*>::iterator itMap = mp.find(key);
+        if(itMap != mp.end()){
+            itMap->second->val = value;
+            touch(key);
+        }
+        else{
+            node *p = new node(key, value);
+            if(mp.size() == mapCapacity){
+                int last = l.back();
+                l.pop_back();
+                mp.erase(last);
+            }
+            l.push_front(key);
+            mp.insert(make_pair(key, p));
+        }
+
+    }
+
+    void touch(int key){
+        list<int>::iterator itList = find(l.begin(), l.end(), key);
+        l.erase(itList);
+        l.push_front(key);
+    }
+};
