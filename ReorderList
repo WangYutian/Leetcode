@@ -1,0 +1,37 @@
+class Solution {
+public:
+    ListNode* getmiddleoflist(ListNode *head){
+        ListNode *slow = head;
+        ListNode *fast = head;
+
+        while(fast->next && fast->next->next){
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+        return slow;
+    }
+    void reorderList(ListNode *head) {
+        if(!head || !head->next)
+            return;
+
+        ListNode *mid = getmiddleoflist(head);
+        ListNode *rHead = mid->next;
+        ListNode *p = rHead->next, *lp = head;
+        mid->next = NULL;
+        rHead->next = NULL;
+
+        while(p){  //头插法倒转后半部分链表
+            ListNode *temp = p;
+            p = p->next;
+            temp->next = rHead;
+            rHead = temp;
+        }
+        while(rHead){ //再插回原链表
+            p = rHead;
+            rHead = rHead->next;
+            p->next = lp->next;
+            lp->next = p;
+            lp = p->next;
+        }
+    }
+};
