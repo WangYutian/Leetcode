@@ -1,0 +1,39 @@
+class Solution {
+public:
+    RandomListNode *copyRandomList(RandomListNode *head) {
+        if (!head) {
+            return NULL;
+        }
+        
+        RandomListNode *p = head, *newP = NULL;
+        while (p) {
+            newP = new RandomListNode(p->label);
+            newP->next = p->next;
+            p->next = newP;
+            p = p->next->next;
+        }
+        
+        p = head;
+        newP = p->next;
+        while (p) {
+            if(p->random)
+                newP->random = p->random->next;
+            p = newP->next;
+            if(p)
+                newP = p->next;
+        }
+
+        RandomListNode *newHead = head->next;
+        p =head;
+        newP = newHead;
+        while (p) {
+            p->next = newP->next;
+            if(p->next)
+                newP->next = newP->next->next;
+            p = p->next;
+            if(p)
+                newP = p->next;
+        }
+        return newHead;
+    }
+};
