@@ -1,0 +1,15 @@
+class Solution { //dp
+public:
+    int maxProduct(int A[], int n) {
+        
+        int ans = A[0], maxProd = A[0], minProd = A[0];
+        for (int i = 1; i < n; i++) {
+            int a = min(A[i] * minProd, A[i] * maxProd);
+            int b = max(A[i] * maxProd, A[i] * minProd);
+            minProd = min(A[i], a);
+            maxProd = max(A[i], b);
+            ans = max(ans, maxProd);
+        }
+        return ans;
+    }
+};
